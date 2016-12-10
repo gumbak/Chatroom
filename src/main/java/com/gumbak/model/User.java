@@ -1,5 +1,9 @@
 package com.gumbak.model;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
 public class User {
 	private String username;
 	
