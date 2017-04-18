@@ -16,7 +16,6 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 		config.setApplicationDestinationPrefixes("/sendTo");
 	}
 	
-	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/stomp").withSockJS();		
 	}

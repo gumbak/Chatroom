@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,13 +34,17 @@ public class ChatroomController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String  addMessage(HttpServletRequest request, @ModelAttribute("chatMessage") ChatMessage chatMessage) {
+	public void  addMessage(HttpServletRequest request, @ModelAttribute("chatMessage") ChatMessage chatMessage) {
 		User user = (User) request.getSession().getAttribute("user");
 		chatMessage.setAuthor(user);
 		
 		ChatMessagesList chatMessagesList = (ChatMessagesList) request.getSession().getAttribute("chatMessagesList");
 		chatMessagesList.addMessages(chatMessage);
-		
-		return "redirect:/chatroom";
+	}
+	
+	@MessageMapping("/stomp")
+	@SendTo("/broker/messages")
+	public ChatMessage sendMessage(ChatMessage message) {
+		return message;
 	}
 }
